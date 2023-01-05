@@ -15,16 +15,6 @@ const gameBoard = (()=>{
         console.log(`${gameArray.slice(0,3)}\n${gameArray.slice(3,6)}\n${gameArray.slice(6,9)}`);
     };
     const checkWinner = (player)=>{
-        // if(gameArray[0] == player.value && gameArray[1] == player.value && gameArray[2] == player.value){
-        //     // console.log(`player${player.value} wins`);
-        //     return true;
-        // }else if(gameArray[3] == player.value && gameArray[4] == player.value && gameArray[5] == player.value){
-        //     // console.log(`player${player.value} wins`);
-        //     return true;
-        // }else if(gameArray[2] == player.value && gameArray[4] == player.value && gameArray[6] == player.value){
-        //     // console.log(`player${player.value} wins`);
-        //     return true;
-        // }
         const checkSameValue = (currentValue)=>currentValue == player.value;
         let j=0;
         for(let i=0; i<9; i+=3){
@@ -43,7 +33,19 @@ const gameBoard = (()=>{
             }
         }
     }
-    return {addItemToArray, makeGamepad, checkWinner};
+
+    const rookieAi = ()=>{
+        let emptyPosition = true;
+        while(emptyPosition){
+            const position = Math.floor(Math.random()*9);
+            if(gameArray[position] !== 'X' && gameArray[position] !== 'O'){
+                emptyPosition = false;
+                return position;
+            }
+        }
+    }
+
+    return {addItemToArray, makeGamepad, checkWinner, rookieAi};
 })();
 
 const players = (value)=>{
@@ -61,14 +63,17 @@ const player2 = players('O');
 gameBoard.makeGamepad();
 for(let i=0; i<9; i++){
     if(i%2 == 0){
-        gameBoard.addItemToArray(prompt('Player1 your position?'), player1);
+
+        console.log('Player 1 playing');
+        gameBoard.addItemToArray(gameBoard.rookieAi(), player1);
         // console.log(gameBoard.checkWinner(player1));
         if(gameBoard.checkWinner(player1) == true){
             console.log(`player${player1.value} wins`)
             break;
         }
     }else{
-        gameBoard.addItemToArray(prompt('Player2 your position?'), player2);
+        console.log('Player 2 playing');
+        gameBoard.addItemToArray(gameBoard.rookieAi(), player2);
         if(gameBoard.checkWinner(player2) == true){
             console.log(`player${player2.value} wins`)
             break;
