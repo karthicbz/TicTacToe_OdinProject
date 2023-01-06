@@ -1,0 +1,23 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cell-container{
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+    gap: 1px;
+}
+
+.cell-container>div{
+    /* width: 150px;
+    height: 150px; */
+    background-color: maroon;
+}
+
+.cell-container>div:hover{
+    cursor: pointer;
+    background-color: rgb(157, 5, 5);
+}
