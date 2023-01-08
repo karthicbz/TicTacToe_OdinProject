@@ -11,7 +11,7 @@ const gameBoard = (()=>{
     };
     const makeGamepad = ()=>{
         for(let i=0; i<9; i++){
-            gameArray.push(i);
+            gameArray[i] = i;
         }
         console.log(`${gameArray.slice(0,3)}\n${gameArray.slice(3,6)}\n${gameArray.slice(6,9)}`);
     };
@@ -22,22 +22,22 @@ const gameBoard = (()=>{
             // console.log(gameArray.slice(i, i+3));
             // console.log([gameArray[j], gameArray[j+3], gameArray[j+6]]);
             if(gameArray.slice(i, i+3).every(checkSameValue) == true){
-                gameArray.length = 0;
+                // gameArray.length = 0;
                 makeGamepad();
                 gameBoardActivities.changeWinnerColor(gameArray.slice(i, i+3));
                 return true;
             }else if([gameArray[j], gameArray[j+3], gameArray[j+6]].every(checkSameValue) == true){
-                gameArray.length = 0;
+                // gameArray.length = 0;
                 makeGamepad();
                 gameBoardActivities.changeWinnerColor([gameArray[j], gameArray[j+3], gameArray[j+6]]);
                 return true;
             }else if([gameArray[0], gameArray[4], gameArray[8]].every(checkSameValue) == true){
-                gameArray.length = 0;
+                // gameArray.length = 0;
                 makeGamepad();
                 gameBoardActivities.changeWinnerColor([gameArray[0], gameArray[4], gameArray[8]]);
                 return true;
             }else if([gameArray[2], gameArray[4], gameArray[6]].every(checkSameValue) == true){
-                gameArray.length = 0;
+                // gameArray.length = 0;
                 makeGamepad();
                 gameBoardActivities.changeWinnerColor([gameArray[2], gameArray[4], gameArray[6]]);
                 return true
@@ -102,29 +102,31 @@ cellContainer.forEach(cells =>{
         gameBoard.makeGamepad();
         if(counter <8){
             console.log(counter);
-        if(counter %2 == 0){
-            e.target.innerText = player1.value;
-            lastPlayer = player1.value;
-            gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
-            if(gameBoard.checkWinner(player1)){
-                heading.textContent = 'Player1 Wins!';
-                gameBoardActivities.displayPlayAgain();
+            if(counter %2 == 0){
+                e.target.innerText = player1.value;
+                lastPlayer = player1.value;
+                gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
+                if(gameBoard.checkWinner(player1)){
+                    heading.textContent = 'Player1 Wins!';
+                    gameBoardActivities.displayPlayAgain();
+                }
+            }else{
+                e.target.innerText = player2.value;
+                lastPlayer = player2.value;
+                gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
+                if(gameBoard.checkWinner(player2)){
+                    heading.textContent = 'Player2 Wins';
+                    gameBoardActivities.displayPlayAgain();
+                }
             }
         }else{
-            e.target.innerText = player2.value;
-            lastPlayer = player2.value;
-            gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
-            if(gameBoard.checkWinner(player2)){
-                heading.textContent = 'Player2 Wins';
-                gameBoardActivities.displayPlayAgain();
-            }
-        }}else{
             if(lastPlayer === 'X'){
                 e.target.innerText = 'O';
             }else{
                 e.target.innerText = 'X';
             }
             heading.textContent = 'Game Draw!';
+            gameBoard.makeGamepad();
             gameBoardActivities.displayPlayAgain();
             counter = 0;
         }
