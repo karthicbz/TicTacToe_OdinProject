@@ -97,9 +97,11 @@ const player2 = players('O');
 let counter = 0;
 let lastPlayer;
 
+gameBoard.makeGamepad();
+
 cellContainer.forEach(cells =>{
     cells.addEventListener('click', (e)=>{
-        gameBoard.makeGamepad();
+        // gameBoard.makeGamepad();
         if(counter <8){
             console.log(counter);
             if(counter %2 == 0){
