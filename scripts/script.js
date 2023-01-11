@@ -2,6 +2,7 @@ const cellContainer = document.querySelectorAll('.cell-container>div');
 // const containerChilds = document.querySelectorAll('.cell-container>div');
 const heading = document.querySelector('h1');
 const playAgain = document.querySelector('.play-again');
+let playAgainActive = false;
 
 const gameBoard = (()=>{
     const gameArray = [];
@@ -102,6 +103,7 @@ gameBoard.makeGamepad();
 cellContainer.forEach(cells =>{
     cells.addEventListener('click', (e)=>{
         // gameBoard.makeGamepad();
+        if(!playAgainActive){
         if(counter <8){
             console.log(counter);
             if(counter %2 == 0){
@@ -132,6 +134,7 @@ cellContainer.forEach(cells =>{
             gameBoardActivities.displayPlayAgain();
             counter = 0;
         }
+    }
         counter++;
     });
 });
@@ -155,12 +158,14 @@ const gameBoardActivities = (()=>{
 
     const displayPlayAgain = ()=>{
         playAgain.setAttribute('style', 'display: block;');
+        playAgainActive = true;
     }
     return {clearCells, changeWinnerColor, displayPlayAgain};
 })();
 
 playAgain.addEventListener('click', ()=>{
     counter = 0;
+    playAgainActive = false;
     playAgain.removeAttribute('style');
     gameBoardActivities.clearCells();
     cellContainer.forEach(cells=>{
