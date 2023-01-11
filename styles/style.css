@@ -62,7 +62,7 @@ h1{
     display: none;
 }
 
-.play, .back{
+.play{
     display: block;
     margin-top: 20px;
 }

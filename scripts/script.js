@@ -3,6 +3,7 @@ const cellContainer = document.querySelectorAll('.cell-container>div');
 const heading = document.querySelector('h1');
 const playAgain = document.querySelector('.play-again');
 const play = document.querySelector('.play');
+const backButton = document.querySelector('.back');
 const choosenGame = document.querySelector('#game');
 
 let playAgainActive = false;
@@ -235,6 +236,7 @@ cellContainer.forEach(cell=>{
         if(gameBoard.checkWinner(player1)){
             count=0;
             gameBoardActivities.displayPlayAgain();
+            gameBoardActivities.displayBackButton();
         }
         if(count <= 4){
             const aiPosition = minimax(gameBoard.gameArray, player2);
@@ -244,12 +246,14 @@ cellContainer.forEach(cell=>{
                 if(gameBoard.checkWinner(player2)){
                     count=0;
                     gameBoardActivities.displayPlayAgain();
+                    gameBoardActivities.displayBackButton();
                 }
             }
         }else{
             gameBoard.makeGamepad();
             count = 0;
             gameBoardActivities.displayPlayAgain();
+            gameBoardActivities.displayBackButton();
         }
     });
 });
@@ -276,7 +280,11 @@ const gameBoardActivities = (()=>{
         playAgain.setAttribute('style', 'display: block;');
         playAgainActive = true;
     }
-    return {clearCells, changeWinnerColor, displayPlayAgain};
+
+    const displayBackButton = ()=>{
+        backButton.setAttribute('style', 'display: block');
+    }
+    return {clearCells, changeWinnerColor, displayPlayAgain, displayBackButton};
 })();
 
 play.addEventListener('click', ()=>{
@@ -301,4 +309,8 @@ playAgain.addEventListener('click', ()=>{
     cellContainer.forEach(cells=>{
         cells.removeAttribute('style');
     });
+})
+
+backButton.addEventListener('click', ()=>{
+    window.location.reload();
 })
