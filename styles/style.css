@@ -46,7 +46,9 @@ h1{
 
 .buttons{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
 }
 
 .play-again, .play, .back{
@@ -60,7 +62,7 @@ h1{
     display: none;
 }
 
-.play{
+.play, .back{
     display: block;
     margin-top: 20px;
 }
