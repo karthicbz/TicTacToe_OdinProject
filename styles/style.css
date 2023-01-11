@@ -23,6 +23,7 @@ h1{
     gap: 1px;
     justify-content: center;
     margin-top: 30px;
+    display: none;
 }
 
 .cell-container>div{
@@ -35,6 +36,7 @@ h1{
     justify-items: center;
     font-size: 4rem;
     color: white;
+    /* display: none; */
 }
 
 .cell-container>div:hover{
@@ -47,7 +49,7 @@ h1{
     justify-content: center;
 }
 
-.play-again{
+.play-again, .play{
     border: none;
     font-size: 1.8rem;
     padding: 0.8rem;
@@ -58,6 +60,33 @@ h1{
     display: none;
 }
 
-.play-again:active{
+.play{
+    display: block;
+    margin-top: 20px;
+}
+
+.play-again:active, .play:active{
     transform: scale(0.9, 0.9);
+}
+
+h2{
+    text-align: center;
+}
+
+.play-options{
+    display: flex;
+    font-size: 1.5rem;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.play-options>#game{
+    font-size: 1.3rem;
+    border: none;
+    /* margin-top: 30px; */
+}
+
+.user-options{
+    margin-top: 50px;
 }

@@ -2,6 +2,8 @@ const cellContainer = document.querySelectorAll('.cell-container>div');
 // const containerChilds = document.querySelectorAll('.cell-container>div');
 const heading = document.querySelector('h1');
 const playAgain = document.querySelector('.play-again');
+const play = document.querySelector('.play');
+
 let playAgainActive = false;
 
 const gameBoard = (()=>{
@@ -273,6 +275,14 @@ const gameBoardActivities = (()=>{
     }
     return {clearCells, changeWinnerColor, displayPlayAgain};
 })();
+
+play.addEventListener('click', ()=>{
+    const container = document.querySelector('.cell-container');
+    const userOptions = document.querySelector('.user-options');
+    container.setAttribute('style', 'display:grid;');
+    userOptions.setAttribute('style', 'display:none;');
+    play.setAttribute('style', 'display: none');
+})
 
 playAgain.addEventListener('click', ()=>{
     counter = 0;
