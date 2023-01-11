@@ -59,18 +59,18 @@ const gameBoard = (()=>{
         }
     }
 
-    return {addItemToArray, makeGamepad, checkWinner, rookieAi};
+    return {addItemToArray, makeGamepad, checkWinner, rookieAi, gameArray};
 })();
 
 const players = (value)=>{
     return {value};
 }
 
-function game(){
-    const player1 = players('X');
-    const player2 = players('O');
-    gameBoard.makeGamepad();
-}
+// function game(){
+//     const player1 = players('X');
+//     const player2 = players('O');
+//     gameBoard.makeGamepad();
+// }
 
 const player1 = players('X');
 const player2 = players('O');
@@ -100,44 +100,142 @@ let lastPlayer;
 
 gameBoard.makeGamepad();
 
-cellContainer.forEach(cells =>{
-    cells.addEventListener('click', (e)=>{
-        // gameBoard.makeGamepad();
-        if(!playAgainActive){
-        if(counter <8){
-            console.log(counter);
-            if(counter %2 == 0){
-                e.target.innerText = player1.value;
-                lastPlayer = player1.value;
-                gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
-                if(gameBoard.checkWinner(player1)){
-                    heading.textContent = 'Player1 Wins!';
-                    gameBoardActivities.displayPlayAgain();
-                }
-            }else{
-                e.target.innerText = player2.value;
-                lastPlayer = player2.value;
-                gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
-                if(gameBoard.checkWinner(player2)){
-                    heading.textContent = 'Player2 Wins';
-                    gameBoardActivities.displayPlayAgain();
-                }
-            }
+// cellContainer.forEach(cells =>{
+//     cells.addEventListener('click', (e)=>{
+//         // gameBoard.makeGamepad();
+//         if(!playAgainActive){
+//         if(counter <8){
+//             console.log(counter);
+//             if(counter %2 == 0){
+//                 e.target.innerText = player1.value;
+//                 lastPlayer = player1.value;
+//                 gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
+//                 if(gameBoard.checkWinner(player1)){
+//                     heading.textContent = 'Player1 Wins!';
+//                     gameBoardActivities.displayPlayAgain();
+//                 }
+//             }else{
+//                 e.target.innerText = player2.value;
+//                 lastPlayer = player2.value;
+//                 gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
+//                 if(gameBoard.checkWinner(player2)){
+//                     heading.textContent = 'Player2 Wins';
+//                     gameBoardActivities.displayPlayAgain();
+//                 }
+//             }
+//         }else{
+//             if(lastPlayer === 'X'){
+//                 e.target.innerText = 'O';
+//             }else{
+//                 e.target.innerText = 'X';
+//             }
+//             heading.textContent = 'Game Draw!';
+//             gameBoard.makeGamepad();
+//             gameBoardActivities.displayPlayAgain();
+//             counter = 0;
+//         }
+//     }
+//         counter++;
+//     });
+// });
+
+const testPlayResults = [];
+
+const checkWinner = (currentBoard, player)=>{
+    if(currentBoard[0] === player.value && currentBoard[1] === player.value && currentBoard[2] === player.value ||
+        currentBoard[3] === player.value && currentBoard[4] === player.value && currentBoard[5] === player.value ||
+        currentBoard[6] === player.value && currentBoard[7] === player.value && currentBoard[8] === player.value ||
+        currentBoard[0] === player.value && currentBoard[3] === player.value && currentBoard[6] === player.value ||
+        currentBoard[1] === player.value && currentBoard[4] === player.value && currentBoard[7] === player.value ||
+        currentBoard[2] === player.value && currentBoard[5] === player.value && currentBoard[8] === player.value ||
+        currentBoard[0] === player.value && currentBoard[4] === player.value && currentBoard[8] === player.value ||
+        currentBoard[2] === player.value && currentBoard[4] === player.value && currentBoard[6] === player.value){
+            return true;
         }else{
-            if(lastPlayer === 'X'){
-                e.target.innerText = 'O';
-            }else{
-                e.target.innerText = 'X';
-            }
-            heading.textContent = 'Game Draw!';
-            gameBoard.makeGamepad();
-            gameBoardActivities.displayPlayAgain();
-            counter = 0;
+            return false;
+        }
+}
+
+const findEmptyArray = (currentBoard)=>{
+    const emptyArray = [];
+    for(let i=0; i<currentBoard.length; i++){
+        if(currentBoard[i] !== 'X' && currentBoard[i] !== 'O'){
+            emptyArray.push(currentBoard[i])
         }
     }
-        counter++;
-    });
-});
+    return emptyArray;
+}
+
+const minimax = (currentBoard, player)=>{
+    // console.log(`function call: ${fc++}`);
+    const emptyPlaces = findEmptyArray(currentBoard);
+
+    if(checkWinner(currentBoard, player1)){
+        return {score: -1};
+    }else if(checkWinner(currentBoard, player2)){
+        return {score: 1};
+    }else if(emptyPlaces.length === 0){
+        return {score: 0};
+    }
+
+    const move = [];
+
+    for(let i=0; i<emptyPlaces.length; i++){
+        // console.log(i);
+        // console.log(Object.values(move));
+        const playScore = {};
+        playScore.index = emptyPlaces[i];
+        currentBoard[emptyPlaces[i]]=player.value;
+        if(player.value === 'O'){
+            const play = minimax(currentBoard, player1);
+            playScore.score = play.score;
+        }else{
+            const play = minimax(currentBoard, player2);
+            playScore.score = play.score;
+        }
+        currentBoard[emptyPlaces[i]] = emptyPlaces[i];
+        move.push(playScore);
+    }
+    let bestScore = 0;
+
+    if(player.value === 'O'){
+        let maximum = -Infinity;
+        for(let i=0; i<move.length; i++){
+            // console.log(move[i].score);
+            if(move[i].score > maximum){
+                maximum = move[i].score
+                bestScore = i;
+            }
+        }
+    }else{
+        let maximum = Infinity;
+        for(let i=0; i<move.length; i++){
+            // console.log(move[i].score);
+            if(move[i].score < maximum){
+                maximum = move[i].score
+                bestScore = i;
+            }
+        }
+    }
+
+    return move[bestScore];
+}
+
+cellContainer.forEach(cell=>{
+    cell.addEventListener('click', (e)=>{
+        e.target.innerText = player1.value;
+        gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
+        gameBoard.checkWinner(player1);
+        const aiPosition = minimax(gameBoard.gameArray, player2);
+        if('index' in aiPosition){
+        cellContainer[aiPosition.index].innerHTML = player2.value;
+        gameBoard.addItemToArray(aiPosition.index, player2);
+        gameBoard.checkWinner(player2);
+        }
+        // console.log(aiPosition);
+        // console.log(cellContainer[aiPosition.index]);
+    })
+})
 
 const gameBoardActivities = (()=>{
     const clearCells = ()=>{
