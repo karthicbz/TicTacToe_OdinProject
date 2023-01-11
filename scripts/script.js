@@ -59,6 +59,85 @@ const player2 = players('O');
 let counter = 0;
 let lastPlayer;
 
+const aiFunction = (()=>{
+    const checkWinner = (currentBoard, player)=>{
+        if(currentBoard[0] === player.value && currentBoard[1] === player.value && currentBoard[2] === player.value ||
+            currentBoard[3] === player.value && currentBoard[4] === player.value && currentBoard[5] === player.value ||
+            currentBoard[6] === player.value && currentBoard[7] === player.value && currentBoard[8] === player.value ||
+            currentBoard[0] === player.value && currentBoard[3] === player.value && currentBoard[6] === player.value ||
+            currentBoard[1] === player.value && currentBoard[4] === player.value && currentBoard[7] === player.value ||
+            currentBoard[2] === player.value && currentBoard[5] === player.value && currentBoard[8] === player.value ||
+            currentBoard[0] === player.value && currentBoard[4] === player.value && currentBoard[8] === player.value ||
+            currentBoard[2] === player.value && currentBoard[4] === player.value && currentBoard[6] === player.value){
+                return true;
+            }else{
+                return false;
+            }
+    }
+    
+    const findEmptyArray = (currentBoard)=>{
+        const emptyArray = [];
+        for(let i=0; i<currentBoard.length; i++){
+            if(currentBoard[i] !== 'X' && currentBoard[i] !== 'O'){
+                emptyArray.push(currentBoard[i])
+            }
+        }
+        return emptyArray;
+    }
+    
+    const minimax = (currentBoard, player)=>{
+        const emptyPlaces = findEmptyArray(currentBoard);
+    
+        if(checkWinner(currentBoard, player1)){
+            return {score: -1};
+        }else if(checkWinner(currentBoard, player2)){
+            return {score: 1};
+        }else if(emptyPlaces.length === 0){
+            return {score: 0};
+        }
+    
+        const move = [];
+    
+        for(let i=0; i<emptyPlaces.length; i++){
+            const playScore = {};
+            playScore.index = emptyPlaces[i];
+            currentBoard[emptyPlaces[i]]=player.value;
+            if(player.value === 'O'){
+                const play = minimax(currentBoard, player1);
+                playScore.score = play.score;
+            }else{
+                const play = minimax(currentBoard, player2);
+                playScore.score = play.score;
+            }
+            currentBoard[emptyPlaces[i]] = emptyPlaces[i];
+            move.push(playScore);
+        }
+        let bestScore = 0;
+    
+        if(player.value === 'O'){
+            let maximum = -Infinity;
+            for(let i=0; i<move.length; i++){
+                if(move[i].score > maximum){
+                    maximum = move[i].score
+                    bestScore = i;
+                }
+            }
+        }else{
+            let maximum = Infinity;
+            for(let i=0; i<move.length; i++){
+                if(move[i].score < maximum){
+                    maximum = move[i].score
+                    bestScore = i;
+                }
+            }
+        }
+    
+        return move[bestScore];
+    }
+
+    return {minimax};
+})();
+
 const playModes = (()=>{
     function userPlay(){
         cellContainer.forEach(cells =>{
@@ -128,7 +207,7 @@ const playModes = (()=>{
                     heading.textContent = 'You won human!';
                 }
                 if(count <= 4){
-                    const aiPosition = minimax(gameBoard.gameArray, player2);
+                    const aiPosition = aiFunction.minimax(gameBoard.gameArray, player2);
                     if('index' in aiPosition){
                         cellContainer[aiPosition.index].innerHTML = player2.value;
                         gameBoard.addItemToArray(aiPosition.index, player2);
@@ -153,84 +232,6 @@ const playModes = (()=>{
 
     return {computerPlay, userPlay, rookieAi};
 })();
-
-
-
-const checkWinner = (currentBoard, player)=>{
-    if(currentBoard[0] === player.value && currentBoard[1] === player.value && currentBoard[2] === player.value ||
-        currentBoard[3] === player.value && currentBoard[4] === player.value && currentBoard[5] === player.value ||
-        currentBoard[6] === player.value && currentBoard[7] === player.value && currentBoard[8] === player.value ||
-        currentBoard[0] === player.value && currentBoard[3] === player.value && currentBoard[6] === player.value ||
-        currentBoard[1] === player.value && currentBoard[4] === player.value && currentBoard[7] === player.value ||
-        currentBoard[2] === player.value && currentBoard[5] === player.value && currentBoard[8] === player.value ||
-        currentBoard[0] === player.value && currentBoard[4] === player.value && currentBoard[8] === player.value ||
-        currentBoard[2] === player.value && currentBoard[4] === player.value && currentBoard[6] === player.value){
-            return true;
-        }else{
-            return false;
-        }
-}
-
-const findEmptyArray = (currentBoard)=>{
-    const emptyArray = [];
-    for(let i=0; i<currentBoard.length; i++){
-        if(currentBoard[i] !== 'X' && currentBoard[i] !== 'O'){
-            emptyArray.push(currentBoard[i])
-        }
-    }
-    return emptyArray;
-}
-
-const minimax = (currentBoard, player)=>{
-    const emptyPlaces = findEmptyArray(currentBoard);
-
-    if(checkWinner(currentBoard, player1)){
-        return {score: -1};
-    }else if(checkWinner(currentBoard, player2)){
-        return {score: 1};
-    }else if(emptyPlaces.length === 0){
-        return {score: 0};
-    }
-
-    const move = [];
-
-    for(let i=0; i<emptyPlaces.length; i++){
-        const playScore = {};
-        playScore.index = emptyPlaces[i];
-        currentBoard[emptyPlaces[i]]=player.value;
-        if(player.value === 'O'){
-            const play = minimax(currentBoard, player1);
-            playScore.score = play.score;
-        }else{
-            const play = minimax(currentBoard, player2);
-            playScore.score = play.score;
-        }
-        currentBoard[emptyPlaces[i]] = emptyPlaces[i];
-        move.push(playScore);
-    }
-    let bestScore = 0;
-
-    if(player.value === 'O'){
-        let maximum = -Infinity;
-        for(let i=0; i<move.length; i++){
-            if(move[i].score > maximum){
-                maximum = move[i].score
-                bestScore = i;
-            }
-        }
-    }else{
-        let maximum = Infinity;
-        for(let i=0; i<move.length; i++){
-            if(move[i].score < maximum){
-                maximum = move[i].score
-                bestScore = i;
-            }
-        }
-    }
-
-    return move[bestScore];
-}
-
 
 
 const gameBoardActivities = (()=>{
