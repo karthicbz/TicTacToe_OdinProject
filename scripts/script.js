@@ -8,6 +8,9 @@ const choosenGame = document.querySelector('#game');
 
 let playAgainActive = false;
 
+let counter = 0;
+let lastPlayer;
+
 const gameBoard = (()=>{
     const gameArray = [];
     const addItemToArray = (position, player)=>{
@@ -48,16 +51,6 @@ const gameBoard = (()=>{
 
     return {addItemToArray, makeGamepad, checkWinner, gameArray};
 })();
-
-const players = (value)=>{
-    return {value};
-}
-
-const player1 = players('X');
-const player2 = players('O');
-
-let counter = 0;
-let lastPlayer;
 
 const aiFunction = (()=>{
     const checkWinner = (currentBoard, player)=>{
@@ -290,5 +283,12 @@ playAgain.addEventListener('click', ()=>{
 backButton.addEventListener('click', ()=>{
     window.location.reload();
 });
+
+const players = (value)=>{
+    return {value};
+}
+
+const player1 = players('X');
+const player2 = players('O');
 
 gameBoard.makeGamepad();
