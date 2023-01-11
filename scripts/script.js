@@ -3,6 +3,7 @@ const cellContainer = document.querySelectorAll('.cell-container>div');
 const heading = document.querySelector('h1');
 const playAgain = document.querySelector('.play-again');
 const play = document.querySelector('.play');
+const choosenGame = document.querySelector('#game');
 
 let playAgainActive = false;
 
@@ -102,47 +103,48 @@ let lastPlayer;
 
 gameBoard.makeGamepad();
 
-// cellContainer.forEach(cells =>{
-//     cells.addEventListener('click', (e)=>{
-//         // gameBoard.makeGamepad();
-//         if(!playAgainActive){
-//         if(counter <8){
-//             console.log(counter);
-//             if(counter %2 == 0){
-//                 e.target.innerText = player1.value;
-//                 lastPlayer = player1.value;
-//                 gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
-//                 if(gameBoard.checkWinner(player1)){
-//                     heading.textContent = 'Player1 Wins!';
-//                     gameBoardActivities.displayPlayAgain();
-//                 }
-//             }else{
-//                 e.target.innerText = player2.value;
-//                 lastPlayer = player2.value;
-//                 gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
-//                 if(gameBoard.checkWinner(player2)){
-//                     heading.textContent = 'Player2 Wins';
-//                     gameBoardActivities.displayPlayAgain();
-//                 }
-//             }
-//         }else{
-//             if(lastPlayer === 'X'){
-//                 e.target.innerText = 'O';
-//             }else{
-//                 e.target.innerText = 'X';
-//             }
-//             heading.textContent = 'Game Draw!';
-//             gameBoard.makeGamepad();
-//             gameBoardActivities.displayPlayAgain();
-//             counter = 0;
-//         }
-//     }
-//         counter++;
-//     });
-// });
+function userPlay(){
+cellContainer.forEach(cells =>{
+    cells.addEventListener('click', (e)=>{
+        // gameBoard.makeGamepad();
+        if(!playAgainActive){
+        if(counter <8){
+            console.log(counter);
+            if(counter %2 == 0){
+                e.target.innerText = player1.value;
+                lastPlayer = player1.value;
+                gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
+                if(gameBoard.checkWinner(player1)){
+                    heading.textContent = 'Player1 Wins!';
+                    gameBoardActivities.displayPlayAgain();
+                }
+            }else{
+                e.target.innerText = player2.value;
+                lastPlayer = player2.value;
+                gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
+                if(gameBoard.checkWinner(player2)){
+                    heading.textContent = 'Player2 Wins';
+                    gameBoardActivities.displayPlayAgain();
+                }
+            }
+        }else{
+            if(lastPlayer === 'X'){
+                e.target.innerText = 'O';
+            }else{
+                e.target.innerText = 'X';
+            }
+            heading.textContent = 'Game Draw!';
+            gameBoard.makeGamepad();
+            gameBoardActivities.displayPlayAgain();
+            counter = 0;
+        }
+    }
+        counter++;
+    });
+});
+}
 
-const testPlayResults = [];
-
+// const testPlayResults = [];
 const checkWinner = (currentBoard, player)=>{
     if(currentBoard[0] === player.value && currentBoard[1] === player.value && currentBoard[2] === player.value ||
         currentBoard[3] === player.value && currentBoard[4] === player.value && currentBoard[5] === player.value ||
@@ -223,7 +225,7 @@ const minimax = (currentBoard, player)=>{
     return move[bestScore];
 }
 
-
+function computerPlay(){
 let count = 0;
 cellContainer.forEach(cell=>{
     cell.addEventListener('click', (e)=>{
@@ -249,8 +251,9 @@ cellContainer.forEach(cell=>{
             count = 0;
             gameBoardActivities.displayPlayAgain();
         }
-    })
-})
+    });
+});
+}
 
 const gameBoardActivities = (()=>{
     const clearCells = ()=>{
@@ -277,6 +280,12 @@ const gameBoardActivities = (()=>{
 })();
 
 play.addEventListener('click', ()=>{
+    // console.log(choosenGame.value);
+    if(choosenGame.value === 'Player'){
+        userPlay();
+    }else{
+        computerPlay();
+    }
     const container = document.querySelector('.cell-container');
     const userOptions = document.querySelector('.user-options');
     container.setAttribute('style', 'display:grid;');
