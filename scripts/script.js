@@ -46,7 +46,7 @@ const gameBoard = (()=>{
         }
     }
 
-    return {addItemToArray, makeGamepad, checkWinner, rookieAi, gameArray};
+    return {addItemToArray, makeGamepad, checkWinner, gameArray};
 })();
 
 const players = (value)=>{
@@ -59,15 +59,13 @@ const player2 = players('O');
 let counter = 0;
 let lastPlayer;
 
-gameBoard.makeGamepad();
-
 const playModes = (()=>{
     function userPlay(){
         cellContainer.forEach(cells =>{
             cells.addEventListener('click', (e)=>{
                 // gameBoard.makeGamepad();
                 if(!playAgainActive){
-                if(counter <8){
+                if(counter <= 8){
                     console.log(counter);
                     if(counter %2 == 0){
                         e.target.innerText = player1.value;
@@ -153,7 +151,7 @@ const playModes = (()=>{
         });
     }
 
-    return {computerPlay, rookieAi, userPlay};
+    return {computerPlay, userPlay, rookieAi};
 })();
 
 
@@ -266,9 +264,9 @@ const gameBoardActivities = (()=>{
 play.addEventListener('click', ()=>{
     // console.log(choosenGame.value);
     if(choosenGame.value === 'Player'){
-        userPlay();
+        playModes.userPlay();
     }else{
-        computerPlay();
+        playModes.computerPlay();
     }
     const container = document.querySelector('.cell-container');
     const userOptions = document.querySelector('.user-options');
@@ -290,4 +288,6 @@ playAgain.addEventListener('click', ()=>{
 
 backButton.addEventListener('click', ()=>{
     window.location.reload();
-})
+});
+
+gameBoard.makeGamepad();
