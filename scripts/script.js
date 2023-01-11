@@ -221,19 +221,32 @@ const minimax = (currentBoard, player)=>{
     return move[bestScore];
 }
 
+
+let count = 0;
 cellContainer.forEach(cell=>{
     cell.addEventListener('click', (e)=>{
+        console.log(count++);
         e.target.innerText = player1.value;
         gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
-        gameBoard.checkWinner(player1);
-        const aiPosition = minimax(gameBoard.gameArray, player2);
-        if('index' in aiPosition){
-        cellContainer[aiPosition.index].innerHTML = player2.value;
-        gameBoard.addItemToArray(aiPosition.index, player2);
-        gameBoard.checkWinner(player2);
+        if(gameBoard.checkWinner(player1)){
+            count=0;
+            gameBoardActivities.displayPlayAgain();
         }
-        // console.log(aiPosition);
-        // console.log(cellContainer[aiPosition.index]);
+        if(count <= 4){
+            const aiPosition = minimax(gameBoard.gameArray, player2);
+            if('index' in aiPosition){
+                cellContainer[aiPosition.index].innerHTML = player2.value;
+                gameBoard.addItemToArray(aiPosition.index, player2);
+                if(gameBoard.checkWinner(player2)){
+                    count=0;
+                    gameBoardActivities.displayPlayAgain();
+                }
+            }
+        }else{
+            gameBoard.makeGamepad();
+            count = 0;
+            gameBoardActivities.displayPlayAgain();
+        }
     })
 })
 
