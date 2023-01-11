@@ -127,7 +127,7 @@ cellContainer.forEach(cells =>{
                 if(gameBoard.checkWinner(player2)){
                     heading.textContent = `${player2.value} Wins`;
                     gameBoardActivities.displayPlayAgain();
-                    gameBoardActivities.displayBackButton();
+                    // gameBoardActivities.displayBackButton();
                 }
             }
         }else{
@@ -139,7 +139,7 @@ cellContainer.forEach(cells =>{
             heading.textContent = 'Game Draw!';
             gameBoard.makeGamepad();
             gameBoardActivities.displayPlayAgain();
-            gameBoardActivities.displayBackButton();
+            // gameBoardActivities.displayBackButton();
             counter = 0;
         }
     }
@@ -233,13 +233,14 @@ function computerPlay(){
     let count = 0;
     cellContainer.forEach(cell=>{
         cell.addEventListener('click', (e)=>{
+            if(!playAgainActive){
             console.log(count++);
             e.target.innerText = player1.value;
             gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
             if(gameBoard.checkWinner(player1)){
                 count=0;
                 gameBoardActivities.displayPlayAgain();
-                gameBoardActivities.displayBackButton();
+                // gameBoardActivities.displayBackButton();
                 heading.textContent = 'You won human!';
             }
             if(count <= 4){
@@ -250,7 +251,7 @@ function computerPlay(){
                     if(gameBoard.checkWinner(player2)){
                         count=0;
                         gameBoardActivities.displayPlayAgain();
-                        gameBoardActivities.displayBackButton();
+                        // gameBoardActivities.displayBackButton();
                         heading.textContent = 'I beat you!';
                     }
                 }
@@ -258,9 +259,10 @@ function computerPlay(){
                 gameBoard.makeGamepad();
                 count = 0;
                 gameBoardActivities.displayPlayAgain();
-                gameBoardActivities.displayBackButton();
+                // gameBoardActivities.displayBackButton();
                 heading.textContent = 'Better luck next time!';
             }
+        }
         });
     });
 }
@@ -305,6 +307,7 @@ play.addEventListener('click', ()=>{
     container.setAttribute('style', 'display:grid;');
     userOptions.setAttribute('style', 'display:none;');
     play.setAttribute('style', 'display: none');
+    gameBoardActivities.displayBackButton();
 })
 
 playAgain.addEventListener('click', ()=>{
