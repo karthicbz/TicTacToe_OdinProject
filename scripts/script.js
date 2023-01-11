@@ -116,16 +116,18 @@ cellContainer.forEach(cells =>{
                 lastPlayer = player1.value;
                 gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
                 if(gameBoard.checkWinner(player1)){
-                    heading.textContent = 'Player1 Wins!';
+                    heading.textContent = `${player1.value} Wins!`;
                     gameBoardActivities.displayPlayAgain();
+                    
                 }
             }else{
                 e.target.innerText = player2.value;
                 lastPlayer = player2.value;
                 gameBoard.addItemToArray(e.target.dataset.cell-1, player2);
                 if(gameBoard.checkWinner(player2)){
-                    heading.textContent = 'Player2 Wins';
+                    heading.textContent = `${player2.value} Wins`;
                     gameBoardActivities.displayPlayAgain();
+                    gameBoardActivities.displayBackButton();
                 }
             }
         }else{
@@ -137,6 +139,7 @@ cellContainer.forEach(cells =>{
             heading.textContent = 'Game Draw!';
             gameBoard.makeGamepad();
             gameBoardActivities.displayPlayAgain();
+            gameBoardActivities.displayBackButton();
             counter = 0;
         }
     }
@@ -227,36 +230,39 @@ const minimax = (currentBoard, player)=>{
 }
 
 function computerPlay(){
-let count = 0;
-cellContainer.forEach(cell=>{
-    cell.addEventListener('click', (e)=>{
-        console.log(count++);
-        e.target.innerText = player1.value;
-        gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
-        if(gameBoard.checkWinner(player1)){
-            count=0;
-            gameBoardActivities.displayPlayAgain();
-            gameBoardActivities.displayBackButton();
-        }
-        if(count <= 4){
-            const aiPosition = minimax(gameBoard.gameArray, player2);
-            if('index' in aiPosition){
-                cellContainer[aiPosition.index].innerHTML = player2.value;
-                gameBoard.addItemToArray(aiPosition.index, player2);
-                if(gameBoard.checkWinner(player2)){
-                    count=0;
-                    gameBoardActivities.displayPlayAgain();
-                    gameBoardActivities.displayBackButton();
-                }
+    let count = 0;
+    cellContainer.forEach(cell=>{
+        cell.addEventListener('click', (e)=>{
+            console.log(count++);
+            e.target.innerText = player1.value;
+            gameBoard.addItemToArray(e.target.dataset.cell-1, player1);
+            if(gameBoard.checkWinner(player1)){
+                count=0;
+                gameBoardActivities.displayPlayAgain();
+                gameBoardActivities.displayBackButton();
+                heading.textContent = 'You won human!';
             }
-        }else{
-            gameBoard.makeGamepad();
-            count = 0;
-            gameBoardActivities.displayPlayAgain();
-            gameBoardActivities.displayBackButton();
-        }
+            if(count <= 4){
+                const aiPosition = minimax(gameBoard.gameArray, player2);
+                if('index' in aiPosition){
+                    cellContainer[aiPosition.index].innerHTML = player2.value;
+                    gameBoard.addItemToArray(aiPosition.index, player2);
+                    if(gameBoard.checkWinner(player2)){
+                        count=0;
+                        gameBoardActivities.displayPlayAgain();
+                        gameBoardActivities.displayBackButton();
+                        heading.textContent = 'I beat you!';
+                    }
+                }
+            }else{
+                gameBoard.makeGamepad();
+                count = 0;
+                gameBoardActivities.displayPlayAgain();
+                gameBoardActivities.displayBackButton();
+                heading.textContent = 'Better luck next time!';
+            }
+        });
     });
-});
 }
 
 const gameBoardActivities = (()=>{
