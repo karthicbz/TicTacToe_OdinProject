@@ -240,7 +240,7 @@ const gameBoardActivities = (()=>{
         // gameArray.length = 0;
         cellContainer.forEach(cells=>{
             if(arr.includes(Number(cells.dataset.cell)-1)){
-                cells.setAttribute('style', 'background-color: green;');
+                cells.setAttribute('style', 'background-color: rgba(0, 128, 0, 0.7);');
             }
         });
     }
