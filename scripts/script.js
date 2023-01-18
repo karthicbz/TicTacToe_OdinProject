@@ -5,6 +5,7 @@ const playAgain = document.querySelector('.play-again');
 const play = document.querySelector('.play');
 const backButton = document.querySelector('.back');
 const choosenGame = document.querySelector('#game');
+const body = document.querySelector('body');
 
 let playAgainActive = false;
 
@@ -287,6 +288,24 @@ backButton.addEventListener('click', ()=>{
 const players = (value)=>{
     return {value};
 }
+
+const getRandomRgb = ()=>{
+    const rgb = [];
+    for(let i=0; i<3; i++){
+        rgb.push(Math.floor(Math.random()*256));
+    }
+    return {rgb};
+}
+
+const changeBackground = ()=>{
+    const color1 = getRandomRgb().rgb;
+    const color2 = getRandomRgb().rgb;
+    body.setAttribute('style', `background-image: linear-gradient(to right, rgb(${color1[0]}, ${color1[1]}, ${color1[2]}), 
+    rgb(${color2[0]}, ${color2[1]}, ${color2[2]}));`);
+    // console.log(color1, color2);
+}
+
+setInterval(changeBackground, 1000);
 
 const player1 = players('X');
 const player2 = players('O');

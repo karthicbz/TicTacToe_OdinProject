@@ -29,7 +29,8 @@ h1{
 .cell-container>div{
     /* width: 150px;
     height: 150px; */
-    background-color: maroon;
+    background-color: rgba(252, 250, 250, 0.5);
+    backdrop-filter: blur(6px);
     display: grid;
     grid-template: 1fr/1fr;
     align-items: center;
